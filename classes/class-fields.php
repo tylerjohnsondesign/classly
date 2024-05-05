@@ -76,6 +76,9 @@ class classlyFields {
         // Loop through fields.
         foreach( $fields as $key => $field ) {
 
+            // Value.
+            $value = '';
+
             // Field. ?>
             <div class="form-field">
                 <label for="<?php echo $key; ?>"><?php echo $field['label']; ?></label><?php
