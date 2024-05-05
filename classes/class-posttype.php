@@ -16,6 +16,8 @@ class classlyPostType {
 
         // Actions.
         add_action( 'init', [ $this, 'register' ], 0 );
+        add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
+        add_action( 'save_post', [ $this, 'save' ] );
 
     }
 
@@ -201,6 +203,80 @@ class classlyPostType {
             register_taxonomy( $taxonomy, $tax['post_types'], $tax['args'] );
 
         }
+
+    }
+
+    /**
+     * Add Meta Box.
+     * 
+     * @since   1.0.0
+     */
+    public function add_meta_box() {
+
+        // Add meta box.
+        add_meta_box(
+            'classly_meta_box',
+            __( 'Schedule', CLASSLY_DOMAIN ),
+            [ $this, 'schedule' ],
+            'class',
+            'normal',
+            'default'
+        );
+
+    }
+
+    /**
+     * Schedule.
+     * 
+     * @since   1.0.0
+     */
+    public function schedule() {
+
+        // Nonce.
+        wp_nonce_field( 'classly_nonce', 'classly_nonce' );
+
+        // Get value.
+        $value = get_post_meta( get_the_ID(), 'classly_schedule', true );
+
+        // Input. ?>
+        <div class="classly_field">
+            <label for="classly_schedule"><?php _e( 'Schedule', CLASSLY_DOMAIN ); ?></label>
+            <input type="text" name="classly_schedule" id="classly_schedule" value="<?php echo $value; ?>">
+        </div>
+        <input type="text" name="classly_schedule" id="classly_schedule" value="<?php echo $value; ?>">
+        <p class="description"><?php _e( 'Enter the schedule for this class.', CLASSLY_DOMAIN ); ?></p><?php
+
+    }
+
+    /**
+     * Save.
+     * 
+     * @since   1.0.0
+     */
+    public function save( $post_id ) {
+
+        // Check nonce.
+        if( ! isset( $_POST['classly_nonce'] ) ) {
+            return $post_id;
+        }
+
+        // Verify nonce.
+        if( ! wp_verify_nonce( $_POST['classly_nonce'], 'classly_nonce' ) ) {
+            return $post_id;
+        }
+
+        // Check autosave.
+        if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+            return $post_id;
+        }
+
+        // Check permissions.
+        if( ! current_user_can( 'edit_post', $post_id ) ) {
+            return $post_id;
+        }
+
+        // Save.
+        update_post_meta( $post_id, 'classly_schedule', $_POST['classly_schedule'] );
 
     }
 
