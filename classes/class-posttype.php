@@ -18,6 +18,7 @@ class classlyPostType {
         add_action( 'init', [ $this, 'register' ], 0 );
         add_action( 'add_meta_boxes', [ $this, 'add_meta_box' ] );
         add_action( 'save_post', [ $this, 'save' ] );
+        add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 
     }
 
@@ -236,15 +237,185 @@ class classlyPostType {
         wp_nonce_field( 'classly_nonce', 'classly_nonce' );
 
         // Get value.
-        $value = get_post_meta( get_the_ID(), 'classly_schedule', true );
+        $value = json_decode( get_post_meta( get_the_ID(), 'classly_schedule', true ), true );
+
+        // Encode value.
+        $encoded = trim( json_encode( $value ), '[]' );
+
+        // IDs.
+        $ids = ( ! empty( $value ) ) ? count( (array)$value ) : 1; ?>
+
+        <div class="classly_schedule_fields" data-count="<?php echo $ids; ?>"><?php
+
+            // Check value.
+            if( empty( $value ) ) {
+
+                // Output initial.
+                echo $this->get_schedule( 1, [] );
+
+            } else {
+
+                // Loop through values.
+                foreach( $value as $id => $values ) {
+
+                    // Output.
+                    echo $this->get_schedule( $id, $values );
+
+                }
+
+            } ?>
+
+        </div>
+        <div class="classly_schedule_copy"><?php
+
+            // Output copy.
+            echo $this->get_schedule( 'copy', [] ); ?>
+
+        </div><?php
 
         // Input. ?>
-        <div class="classly_field">
-            <label for="classly_schedule"><?php _e( 'Schedule', CLASSLY_DOMAIN ); ?></label>
-            <input type="text" name="classly_schedule" id="classly_schedule" value="<?php echo $value; ?>">
+        <div class="classly_schedule_add">
+            <button class="classly_schedule_add_button">+ Add Schedule</button>
         </div>
-        <input type="text" name="classly_schedule" id="classly_schedule" value="<?php echo $value; ?>">
-        <p class="description"><?php _e( 'Enter the schedule for this class.', CLASSLY_DOMAIN ); ?></p><?php
+        <form method="POST">
+            <input type="hidden" name="classly_schedule" id="classly_schedule" value='<?php echo $encoded; ?>'>
+        </form><?php
+
+    }
+
+    /**
+     * Get schedule field.
+     * 
+     * @since   1.0.0
+     */
+    public function get_schedule( $id, $values = [] ) {
+        
+        // Start output buffering.
+        ob_start();
+        
+        // Check if copy.
+        $copy = ( $id == 'copy' ) ? ' style="display:none;"' : ''; ?>
+
+        <div id="schedule-<?php echo $id; ?>" class="classly_schedule_field"<?php echo $copy; ?>>
+            <div class="classly_schedule_day">
+                <label for="classly_schedule_day"><?php _e( 'Day', CLASSLY_DOMAIN ); ?></label>
+                <select class="classy_schedule_day_field">
+                    <option value=""><?php _e( 'Select...', CLASSLY_DOMAIN ); ?></option><?php
+
+                    // Loop through days.
+                    foreach( $this->get_days() as $day_id => $day ) {
+
+                        // Check selected.
+                        $selected = ( isset( $values['day'] ) && $values['day'] == $day_id ) ? ' selected' : '';
+
+                        // Option. ?>
+                        <option value="<?php echo $day_id; ?>"<?php echo $selected; ?>><?php echo $day; ?></option><?php
+
+                    } ?>
+
+                </select>
+            </div>
+            <div class="classly_schedule_start">
+                <label for="classly_schedule_start"><?php _e( 'Start Time', CLASSLY_DOMAIN ); ?></label>
+                <select class="classy_schedule_start_field">
+                    <option value=""><?php _e( 'Select...', CLASSLY_DOMAIN ); ?></option><?php
+
+                    // Loop through times.
+                    foreach( $this->get_times() as $time_id => $time ) {
+
+                        // Check selected.
+                        $selected = ( isset( $values['start'] ) && $values['start'] == $time_id ) ? ' selected' : '';
+
+                        // Option. ?>
+                        <option value="<?php echo $time_id; ?>"<?php echo $selected; ?>><?php echo $time; ?></option><?php
+
+                    } ?>
+                    
+                </select>
+            </div>
+            <div class="classly_schedule_end">
+                <label for="classly_schedule_end"><?php _e( 'End Time', CLASSLY_DOMAIN ); ?></label>
+                <select class="classy_schedule_end_field">
+                    <option value=""><?php _e( 'Select...', CLASSLY_DOMAIN ); ?></option><?php
+
+                    // Loop through times.
+                    foreach( $this->get_times() as $time_id => $time ) {
+
+                        // Check selected.
+                        $selected = ( isset( $values['end'] ) && $values['end'] == $time_id ) ? ' selected' : '';
+
+                        // Option. ?>
+                        <option value="<?php echo $time_id; ?>"<?php echo $selected; ?>><?php echo $time; ?></option><?php
+
+                    } ?>
+                    
+                </select>
+            </div>
+            <div class="classly_schedule_remove">
+                <button class="classly_schedule_remove_button">×</button>
+            </div>
+        </div><?php
+
+        // Return.
+        return ob_get_clean();
+
+    }
+
+    /**
+     * Get days.
+     * 
+     * @since   1.0.0
+     */
+    public function get_days() {
+
+        // Days.
+        $days = [
+            'monday'    => __( 'Monday', CLASSLY_DOMAIN ),
+            'tuesday'   => __( 'Tuesday', CLASSLY_DOMAIN ),
+            'wednesday' => __( 'Wednesday', CLASSLY_DOMAIN ),
+            'thursday'  => __( 'Thursday', CLASSLY_DOMAIN ),
+            'friday'    => __( 'Friday', CLASSLY_DOMAIN ),
+            'saturday'  => __( 'Saturday', CLASSLY_DOMAIN ),
+            'sunday'    => __( 'Sunday', CLASSLY_DOMAIN ),
+        ];
+
+        // Return.
+        return $days;
+
+    }
+
+    /**
+     * Get times.
+     * 
+     * @since   1.0.0
+     */
+    public function get_times() {
+
+        // Set times.
+        $times = [];
+
+        // Set range.
+        $range = range( 0, 23 );
+
+        // Loop through range.
+        foreach( $range as $hour ) {
+
+            // Loop through range.
+            foreach( range( 0, 45, 15 ) as $minute ) {
+
+                // Set time.
+                $time   = date( 'H:i', strtotime( $hour . ':' . $minute ) );
+                $label  = date( 'g:iA', strtotime( $hour . ':' . $minute ) );
+
+                // Add to times.
+                $times[$time] = $label;
+
+            }
+
+        }
+
+        // Return.
+        return $times;
 
     }
 
@@ -277,6 +448,21 @@ class classlyPostType {
 
         // Save.
         update_post_meta( $post_id, 'classly_schedule', $_POST['classly_schedule'] );
+
+    }
+
+    /**
+     * Enqueue.
+     * 
+     * @since   1.0.0
+     */
+    public function enqueue() {
+
+        // CSS.
+        wp_enqueue_style( 'classly-schedule-css', CLASSLY_URI . 'assets/css/schedule.css', [], CLASSLY_VERSION, 'all' );
+
+        // JS.
+        wp_enqueue_script( 'classly-schedule-js', CLASSLY_URI . 'assets/js/schedule.js', [ 'jquery' ], CLASSLY_VERSION, true );
 
     }
 

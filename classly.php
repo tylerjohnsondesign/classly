@@ -61,6 +61,7 @@ function classlydeactivation() {
 require_once CLASSLY_PATH . 'classes/class-posttype.php';
 require_once CLASSLY_PATH . 'classes/class-fields.php';
 require_once CLASSLY_PATH . 'classes/class-admin.php';
+require_once CLASSLY_PATH . 'classes/class-shortcode.php';
 
 /**
  * Initiate classes.
@@ -70,3 +71,4 @@ require_once CLASSLY_PATH . 'classes/class-admin.php';
 new classlyPostType();
 new classlyFields();
 new classlyAdmin();
+new classlyShortcode();
