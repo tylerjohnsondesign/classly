@@ -62,6 +62,7 @@ require_once CLASSLY_PATH . 'classes/class-posttype.php';
 require_once CLASSLY_PATH . 'classes/class-fields.php';
 require_once CLASSLY_PATH . 'classes/class-admin.php';
 require_once CLASSLY_PATH . 'classes/class-shortcode.php';
+require_once CLASSLY_PATH . 'classes/class-process.php';
 
 /**
  * Initiate classes.
@@ -72,3 +73,15 @@ new classlyPostType();
 new classlyFields();
 new classlyAdmin();
 new classlyShortcode();
+
+add_action( 'wp_head', 'classly_process' );
+function classly_process() {
+
+    // Process.
+    $process = new classlyProcess();
+
+    echo '<pre>';
+    print_r( $process->get_classes() );
+    echo '</pre>';
+
+}

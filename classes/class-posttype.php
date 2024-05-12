@@ -427,24 +427,16 @@ class classlyPostType {
     public function save( $post_id ) {
 
         // Check nonce.
-        if( ! isset( $_POST['classly_nonce'] ) ) {
-            return $post_id;
-        }
+        if( ! isset( $_POST['classly_nonce'] ) ) return $post_id;
 
         // Verify nonce.
-        if( ! wp_verify_nonce( $_POST['classly_nonce'], 'classly_nonce' ) ) {
-            return $post_id;
-        }
+        if( ! wp_verify_nonce( $_POST['classly_nonce'], 'classly_nonce' ) ) return $post_id;
 
         // Check autosave.
-        if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-            return $post_id;
-        }
+        if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return $post_id;
 
         // Check permissions.
-        if( ! current_user_can( 'edit_post', $post_id ) ) {
-            return $post_id;
-        }
+        if( ! current_user_can( 'edit_post', $post_id ) ) return $post_id;
 
         // Save.
         update_post_meta( $post_id, 'classly_schedule', $_POST['classly_schedule'] );
