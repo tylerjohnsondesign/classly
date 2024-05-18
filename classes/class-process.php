@@ -24,7 +24,7 @@ class classlyProcess {
         $times = $this->times( $classes );
 
         // Get grid.
-        $grid = $this->grid( $classes, $days, $times );
+        $grid = $this->grid( $days, $times, $classes );
 
         // Return.
         return $grid;
@@ -130,53 +130,20 @@ class classlyProcess {
             // Loop through schedule.
             foreach( (array)$schedule as $data ) {
 
-                // Check start.
-                if( $data['start'] ) {
+                // Get time range.
+                $range = $this->time_range( $data['start'], $data['end'] );
 
-                    // Explode.
-                    $hour = explode( ':', $data['start'] );
+                // Loop through range.
+                foreach( $range as $time ) {
 
-                    // Set hour.
-                    $time = $hour[0] . ':00';
-
-                    // Check if time exists.
-                    if( in_array( $time, (array)$times ) ) continue;
-
-                    // Add to time.
-                    $times[] = $time;
-
-                }
-
-                // Check end.
-                if( $data['end'] ) {
-
-                    // Explode.
-                    $hour = explode( ':', $data['end'] );
-
-                    // Set time.
-                    $time = $hour[0] . ':00';
-
-                    // Check minutes.
-                    if( $hour[1] !== '00' ) {
-
-                        // Add hour.
-                        $time = ( $hour[0] + 1 ) . ':00';
-
-                    }
-
-                    // Check if missing leading zero.
-                    if( strlen( $time ) == 4 ) {
-
-                        // Add zero.
-                        $time = ( ( $hour[0] + 1 ) > 9 ) ? $time : '0' . $time;
-
-                    }
+                    // Check if time has 4 digits.
+                    if( strlen( $time ) === 1 ) $time = '0' . $time;
 
                     // Check if time exists.
-                    if( in_array( $time, (array)$times ) ) continue;
+                    if( in_array( $time . ':00', (array)$times ) ) continue;
 
                     // Add to time.
-                    $times[] = $time;
+                    $times[] = $time . ':00';
 
                 }
 
@@ -197,16 +164,113 @@ class classlyProcess {
      * 
      * @since   1.0.0
      */
-    public function grid( $classes, $days, $times ) {
+    public function grid( $days, $times, $classes ) {
         
         // Grid.
         $grid = [];
 
         // Loop through days.
-        
+        foreach( $days as $day ) {
+
+            // Loop through times.
+            foreach( $times as $time ) {
+
+                // Set cell.
+                $cell = [];
+
+                // Loop through classes.
+                foreach( $classes as $class ) {
+
+                    // Get schedule.
+                    $schedule = json_decode( get_post_meta( $class, 'classly_schedule', true ), true );
+
+                    // Loop through schedule.
+                    foreach( (array)$schedule as $data ) {
+
+                        // Check day.
+                        if( $data['day'] !== $day ) continue;
+
+                        // Check start.
+                        if( $data['start'] ) {
+
+                            // Explode.
+                            $hour = explode( ':', $data['start'] );
+
+                            // Set start.
+                            $start = $hour[0] . ':00';
+
+                            // Check if time matches.
+                            if( $start == $time ) {
+
+                                // Set start and end.
+                                $start = ( $hour[1] / 60 ) * 100;
+
+                                // Add start.
+                                $cell['start'] = $class . ',' . $start;
+
+                            }
+
+                        }
+
+                        // Check end.
+                        if( $data['end'] ) {
+
+                            // Explode.
+                            $hour = explode( ':', $data['end'] );
+
+                            // Set end.
+                            $end = $hour[0] . ':00';
+
+                            // Check if time matches.
+                            if( $end == $time ) {
+
+                                // Set end.
+                                $end = ( $hour[1] / 60 ) * 100;
+
+                                // Set class.
+                                $cell['end'] = $class . ',' . $end;
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+                // Add cell.
+                $grid[$day][$time] = $cell;
+
+            }
+
+        }
 
         // Return.
         return $grid;
+
+    }
+
+    /**
+     * Time range.
+     * 
+     * @since   1.0.0
+     */
+    public function time_range( $start, $end ) {
+
+        // Set range.
+        $range = [];
+
+        // Explode start.
+        $start = explode( ':', $start );
+
+        // Explode end.
+        $end = explode( ':', $end );
+
+        // Set start.
+        $range = range( $start[0], ( $end[0] + 1 ) );
+
+        // Return.
+        return $range;
 
     }
 
