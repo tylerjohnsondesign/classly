@@ -1,0 +1,56 @@
+.classly-modules {
+    display: grid;
+    grid: auto-flow dense / 1fr 5fr;
+}
+
+.classly-grid {
+    display: grid;
+    grid: auto-flow dense / 1fr 1fr 1fr 1fr 1fr;
+}
+
+.classly-times,
+.classly-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.classly-time,
+.classly-cell {
+    display: flex;
+    flex: 1;
+    min-height: 200px;
+}
+
+.classly-cell.classly-class {
+    position: relative;
+}
+
+.classly-single {
+    position: absolute;
+    background: blue;
+    display: flex;
+    width: 100%;
+}
+
+.classly-single a {
+    padding: 30px;
+    width: 100%;
+}
+
+.classly-single a p {
+    margin: 0;
+}
+
+.classly-time__label {
+    width: 100%;
+    display: block;
+}
+
+p.classly-class-time {
+    opacity: 0.75;
+}
+
+p.classly-class-title {
+    font-weight: bold;
+    font-size: 18px;
+}

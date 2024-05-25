@@ -3,5 +3,105 @@
  * Schedule.
  * 
  * @since   1.0.0
- */ ?>
-<h1>Hello</h1>
+ */ 
+
+// Get classes.
+$classes = $process->get_classes(); ?>
+<div class="classly-schedule">
+    <div class="classly-modules">
+        <div class="classly-times"><?php
+
+            // Get the times.
+            $times = array_slice( $classes, 0, 1, true );
+            $times = reset( $times );
+
+            // Add empty block. ?>
+            <div class="classly-time classly-empty"></div><?php
+
+            // Loop through times.
+            foreach( $times as $time => $values ) {
+
+                // Convert time to 12 hour format.
+                $time = date( 'g:iA', strtotime( $time ) );
+
+                // Output. ?>
+                <div class="classly-time">
+                    <div class="classly-time__label"><?php echo $time; ?></div>
+                </div><?php
+
+            } ?>
+
+        </div>
+        <div class="classly-grid"><?php
+
+            // Loop through days.
+            foreach( $classes as $day => $slots ) {
+
+                // Output. ?>
+                <div class="classly-column">
+                    <div class="classly-cell classly-day">
+                        <div class="classly-day__label"><?php echo ucwords( $day ); ?></div>
+                    </div><?php
+
+                    // Loop through slots.
+                    foreach( $slots as $slot ) {
+
+                        // Check if empty.
+                        if( empty( $slot ) ) {
+
+                            // Output empty. ?>
+                            <div class="classly-cell classly-empty"></div><?php
+
+                        } else {
+
+                            // Output class. ?>
+                            <div class="classly-cell classly-class"><?php
+
+                                // Check end.
+                                if( ! empty( $slot['end'] ) ) {
+
+                                    // Set end.
+                                    $end = explode( ',', $slot['end'] );
+
+                                    // Output. ?>
+                                    <div class="classly-single classly-single-end" style="top:1;height:<?php echo $end[1] - 1; ?>%;">
+                                        <a href="<?php echo get_permalink( $end[0] ); ?>">
+                                            <p style="display:none"><?php echo get_the_title( $end[0] ); ?></p>
+                                        </a>
+                                    </div><?php
+                                    
+                                }
+
+                                // Check for start.
+                                if( ! empty( $slot['start'] ) ) {
+
+                                    // Set start.
+                                    $start = explode( ',', $slot['start'] );
+
+                                    // Set start and end times.
+                                    $start_time = date( 'g:iA', strtotime( $start[2] ) );
+                                    $end_time = date( 'g:iA', strtotime( $start[3] ) );
+
+                                    // Output. ?>
+                                    <div class="classly-single classly-single-start" style="top:<?php echo $start[1]; ?>%;height:<?php echo 100 - (int)$start[1];?>%;">
+                                        <a href="<?php echo get_permalink( $start[0] ); ?>">
+                                            <p class="classly-class-title"><?php echo get_the_title( $start[0] ); ?></p>
+                                            <p class="classly-class-time"><?php echo $start_time . '-' . $end_time; ?></p>
+                                        </a>
+                                    </div><?php
+
+                                } ?>
+
+                            </div><?php
+
+                        }
+
+                    } ?>
+
+                </div><?php
+
+            } ?>
+
+        </div>
+    </div>
+</div>

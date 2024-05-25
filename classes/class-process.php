@@ -17,14 +17,8 @@ class classlyProcess {
         // Query.
         $classes = $this->query();
 
-        // Get days.
-        $days = $this->days( $classes );
-
-        // Get times.
-        $times = $this->times( $classes );
-
         // Get grid.
-        $grid = $this->grid( $days, $times, $classes );
+        $grid = $this->grid( $this->days( $classes ), $this->times( $classes ), $classes );
 
         // Return.
         return $grid;
@@ -206,7 +200,7 @@ class classlyProcess {
                                 $start = ( $hour[1] / 60 ) * 100;
 
                                 // Add start.
-                                $cell['start'] = $class . ',' . $start;
+                                $cell['start'] = $class . ',' . $start . ',' . $data['start'] . ',' . $data['end'];
 
                             }
 
@@ -241,6 +235,9 @@ class classlyProcess {
                 // Add cell.
                 $grid[$day][$time] = $cell;
 
+                // Sort cell so end is first.
+                ksort( $grid[$day][$time] );
+
             }
 
         }
@@ -267,7 +264,7 @@ class classlyProcess {
         $end = explode( ':', $end );
 
         // Set start.
-        $range = range( $start[0], ( $end[0] + 1 ) );
+        $range = range( $start[0], $end[0] );
 
         // Return.
         return $range;

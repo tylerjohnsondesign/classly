@@ -74,84 +74,19 @@ new classlyFields();
 new classlyAdmin();
 new classlyShortcode();
 
-add_action( 'wp_head', 'classly_process' );
+//add_action( 'wp_head', 'classly_process' );
 function classly_process() {
 
     // Process.
-    $process = new classlyProcess(); ?>
+    $process = new classlyProcess();
+    
+    // Start output buffering.
+    ob_start();
 
-    <div class="classly-schedule">
-        <div class="classly-time"><?php
+    // Include template.
+    include CLASSLY_PATH . 'views/schedule.php';
 
-            // Set count.
-            $count = 0;
-
-            // Loop.
-            foreach( $process->get_classes() as $day => $times ) {
-
-                // Add to count.
-                $count++;
-
-                // If count is greater than 1, break.
-                if( $count > 1 ) break;
-
-                // Loop through times.
-                foreach( $times as $time => $class ) {
-
-                    // Output columns. ?>
-                    <div class="classly-time-header">
-                        <?php echo $time; ?>
-                    </div><?php
-
-                }
-
-            } ?>
-
-        </div>
-        <div class="classly-days">
-            <div class="classly-days-header"><?php
-
-                // Loop.
-                foreach( $process->get_classes() as $day => $times ) {
-
-                    // Output columns. ?>
-                    <div class="classly-day-header">
-                        <?php echo $day; ?>
-                    </div><?php
-
-                } ?>
-
-            </div>
-            <div class="classly-days-body"><?php
-
-                // Loop.
-                foreach( $process->get_classes() as $day => $times ) {
-
-                    // Output column. ?>
-                    <div class="classly-day-body"><?php
-
-                        // Loop through times.
-                        foreach( $times as $time => $class ) {
-
-                            // Check if class is set.
-                            if( empty( $class ) ) continue;
-
-                            // Output. ?>
-                            <div class="classly-day-time">
-                                <?php echo $time; ?>
-                                <div class="classly-day-class">
-                                    <?php echo get_the_title( $class['start'] ); ?>
-                                </div>
-                            </div><?php
-
-                        } ?>
-                        
-                    </div><?php
-
-                } ?>
-
-            </div>
-        </div>
-    </div><?php
+    // Return buffer.
+    echo ob_get_clean();
 
 }
