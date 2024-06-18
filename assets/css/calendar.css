@@ -21,20 +21,34 @@
     min-height: 200px;
 }
 
+.classly-cell.classly-day {
+    display: block;
+    min-height: 60px;
+}
+
+.classly-time.classly-empty {
+    min-height: 60px;
+}
+
 .classly-cell.classly-class {
     position: relative;
 }
 
 .classly-single {
     position: absolute;
-    background: blue;
+    background: black;
     display: flex;
     width: 100%;
 }
 
 .classly-single a {
-    padding: 30px;
+    padding: 15px;
     width: 100%;
+    position: relative;
+    z-index: 99;
+    line-height: 1.2;
+    color: #fff;
+    text-decoration: none !important;
 }
 
 .classly-single a p {
