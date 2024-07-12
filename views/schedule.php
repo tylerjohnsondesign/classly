@@ -32,7 +32,7 @@ $classes = $process->get_classes(); ?>
             } ?>
 
         </div>
-        <div class="classly-grid"><?php
+        <div class="classly-grid classly-grid-<?php echo count( $classes ); ?>"><?php
 
             // Loop through days.
             foreach( $classes as $day => $slots ) {
@@ -64,7 +64,7 @@ $classes = $process->get_classes(); ?>
                                     $end = explode( ',', $slot['end'] );
 
                                     // Output. ?>
-                                    <div class="classly-single classly-single-end" style="top:1;height:<?php echo $end[1] - 1; ?>%;">
+                                    <div class="classly-single classly-single-end" style="display:none !important;">
                                         <a href="<?php echo get_permalink( $end[0] ); ?>">
                                             <p style="display:none"><?php echo get_the_title( $end[0] ); ?></p>
                                         </a>
@@ -83,7 +83,7 @@ $classes = $process->get_classes(); ?>
                                     $end_time = date( 'g:iA', strtotime( $start[3] ) );
 
                                     // Output. ?>
-                                    <div class="classly-single classly-single-start" style="top:<?php echo $start[1]; ?>%;height:<?php echo 100 - (int)$start[1];?>%;">
+                                    <div class="classly-single classly-single-start" style="top:<?php echo $start[1]; ?>%;height:<?php echo $start[4];?>%;">
                                         <a href="<?php echo get_permalink( $start[0] ); ?>">
                                             <p class="classly-class-title"><?php echo get_the_title( $start[0] ); ?></p>
                                             <p class="classly-class-time"><?php echo $start_time . '-' . $end_time; ?></p>

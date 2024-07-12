@@ -199,8 +199,11 @@ class classlyProcess {
                                 // Set start and end.
                                 $start = ( $hour[1] / 60 ) * 100;
 
+                                // Calculate height of element based on minutes.
+                                $height = ( ( ( strtotime( $data['end'] ) - strtotime( $data['start'] ) ) / 60 ) / 60 ) * 100;
+
                                 // Add start.
-                                $cell['start'] = $class . ',' . $start . ',' . $data['start'] . ',' . $data['end'];
+                                $cell['start'] = $class . ',' . $start . ',' . $data['start'] . ',' . $data['end'] . ',' . $height;
 
                             }
 

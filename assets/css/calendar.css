@@ -1,11 +1,38 @@
 .classly-modules {
     display: grid;
-    grid: auto-flow dense / 1fr 5fr;
+    grid: auto-flow dense / 150px 5fr;
 }
 
 .classly-grid {
     display: grid;
+}
+
+.classly-grid-1 {
+    grid: auto-flow dense / 1fr;
+}
+
+.classly-grid-2 {
+    grid: auto-flow dense / 1fr 1fr;
+}
+
+.classly-grid-3 {
+    grid: auto-flow dense / 1fr 1fr 1fr;
+}
+
+.classly-grid-4 {
+    grid: auto-flow dense / 1fr 1fr 1fr 1fr;
+}
+
+.classly-grid-5 {
     grid: auto-flow dense / 1fr 1fr 1fr 1fr 1fr;
+}
+
+.classly-grid-6 {
+    grid: auto-flow dense / 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.classly-grid-7 {
+    grid: auto-flow dense / 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
 }
 
 .classly-times,
@@ -18,7 +45,7 @@
 .classly-cell {
     display: flex;
     flex: 1;
-    min-height: 200px;
+    min-height: 180px;
 }
 
 .classly-cell.classly-class {
@@ -27,14 +54,26 @@
 
 .classly-single {
     position: absolute;
-    background: blue;
+    background: #000;
     display: flex;
     width: 100%;
+    z-index: 1;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+}
+
+.classly-single:hover {
+    background: #222;
+    transform: scale(1.05);
 }
 
 .classly-single a {
-    padding: 30px;
+    padding: 20px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .classly-single a p {
@@ -46,6 +85,11 @@
     display: block;
 }
 
+.classly-time__label,
+.classly-day__label {
+    font-weight: bold;
+}
+
 p.classly-class-time {
     opacity: 0.75;
 }
@@ -53,4 +97,44 @@ p.classly-class-time {
 p.classly-class-title {
     font-weight: bold;
     font-size: 18px;
+}
+
+.classly-time,
+.classly-cell {
+    border-bottom: 1px solid rgb(0 0 0 / 20%);
+}
+
+.classly-column {
+    border-left: 1px solid rgb(0 0 0 / 20%);
+}
+
+.classly-cell.classly-day, 
+.classly-time.classly-empty,
+.classly-time .classly-time__label {
+    min-height: 0;
+    padding: 30px;
+}
+
+.classly-time {
+    text-align: right;
+}
+
+@media screen and (max-width:991px) {
+
+    .classly-times {
+        display: none;
+    }
+    
+    .classly-modules {
+        grid: auto-flow dense / 1fr;
+    }
+    
+    .classly-grid {
+        grid: auto-flow dense / 1fr;
+    }
+    
+    .classly-cell.classly-empty {
+        display: none;
+    }
+
 }
