@@ -63,6 +63,7 @@ require_once CLASSLY_PATH . 'classes/class-fields.php';
 require_once CLASSLY_PATH . 'classes/class-admin.php';
 require_once CLASSLY_PATH . 'classes/class-shortcode.php';
 require_once CLASSLY_PATH . 'classes/class-process.php';
+require_once CLASSLY_PATH . 'classes/class-frontend.php';
 
 /**
  * Initiate classes.
@@ -73,20 +74,4 @@ new classlyPostType();
 new classlyFields();
 new classlyAdmin();
 new classlyShortcode();
-
-//add_action( 'wp_head', 'classly_process' );
-function classly_process() {
-
-    // Process.
-    $process = new classlyProcess();
-    
-    // Start output buffering.
-    ob_start();
-
-    // Include template.
-    include CLASSLY_PATH . 'views/schedule.php';
-
-    // Return buffer.
-    echo ob_get_clean();
-
-}
+new classlyFrontend();

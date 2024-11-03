@@ -51,6 +51,9 @@ class classlyShortcode {
         // CSS.
         wp_enqueue_style( 'classly-calendar', CLASSLY_URI . 'assets/css/calendar.css', [], CLASSLY_VERSION );
 
+        // JS.
+        wp_enqueue_script( 'classly-calendar', CLASSLY_URI . 'assets/js/calendar.js', [ 'jquery' ], CLASSLY_VERSION, true );
+
     }
 
 }

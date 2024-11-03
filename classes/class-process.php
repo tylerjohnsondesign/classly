@@ -84,6 +84,9 @@ class classlyProcess {
             // Loop through schedule.
             foreach( (array)$schedule as $data ) {
 
+                // Check if array.
+                if( ! is_array( $data ) ) continue;
+
                 // Check if day exists.
                 if( in_array( $data['day'], (array)$days ) ) continue;
 
@@ -123,6 +126,9 @@ class classlyProcess {
 
             // Loop through schedule.
             foreach( (array)$schedule as $data ) {
+
+                // Check if array.
+                if( ! is_array( $data ) ) continue;
 
                 // Get time range.
                 $range = $this->time_range( $data['start'], $data['end'] );
@@ -180,6 +186,9 @@ class classlyProcess {
 
                     // Loop through schedule.
                     foreach( (array)$schedule as $data ) {
+
+                        // Check if array.
+                        if( ! is_array( $data ) ) continue;
 
                         // Check day.
                         if( $data['day'] !== $day ) continue;
@@ -273,5 +282,34 @@ class classlyProcess {
         return $range;
 
     }
+
+    /**
+     * Get types.
+     * 
+     * @since   1.0.0
+     */
+    public function get_types( $id = false ) {
+
+        // Check for ID.
+        if( $id ) {
+
+            // Get terms for post.
+            $types = get_the_terms( $id, 'class_type' );
+
+        } else {
+
+            // Get terms.
+            $types = get_terms( [
+                'taxonomy'   => 'class_type',
+                'hide_empty' => true,
+            ] );
+
+        }
+
+        // Return.
+        return $types;
+
+    }
+
 
 }

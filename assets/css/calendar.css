@@ -45,7 +45,7 @@
 .classly-cell {
     display: flex;
     flex: 1;
-    min-height: 180px;
+    min-height: 120px;
 }
 
 .classly-cell.classly-day {
@@ -75,11 +75,16 @@
 .classly-single:hover {
     background: #222;
     transform: scale(1.05);
+    z-index: 5;
 }
 
 .classly-single a {
-    padding: 30px;
+    padding: 15px;
+    font-size: 14px;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .classly-single a p {
@@ -102,7 +107,7 @@ p.classly-class-time {
 
 p.classly-class-title {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 16px;
 }
 
 .classly-time,
@@ -121,8 +126,42 @@ p.classly-class-title {
     padding: 30px;
 }
 
+.classly-time .classly-time__label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 16px;
+}
+
 .classly-time {
     text-align: right;
+}
+
+.classly-filtering {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    margin: 0 0 15px 0;
+    grid-gap: 2.5px;
+}
+
+button.classly-filter-button {
+    background: none;
+    color: #000;
+    border: 1px solid #000;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 15px;
+    transition: all 0.3s ease;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+button.classly-filter-button:hover,
+button.classly-filter-active {
+    background: #000;
+    color: #fff;
 }
 
 @media screen and (max-width:991px) {

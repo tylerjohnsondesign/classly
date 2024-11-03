@@ -239,6 +239,7 @@ class classlyPostType {
         // Get value.
         $value = json_decode( get_post_meta( get_the_ID(), 'classly_schedule', true ), true );
 
+        // TODO: Check if value is an array.
         // Encode value.
         $encoded = trim( json_encode( $value ), '[]' );
 
@@ -278,7 +279,7 @@ class classlyPostType {
             <button class="classly_schedule_add_button">+ Add Schedule</button>
         </div>
         <form method="POST">
-            <input type="hidden" name="classly_schedule" id="classly_schedule" value='<?php echo $encoded; ?>'>
+            <input type="hidden" name="classly_schedule" id="classly_schedule" value='<?php echo $value; ?>'>
         </form><?php
 
     }
@@ -437,6 +438,8 @@ class classlyPostType {
 
         // Check permissions.
         if( ! current_user_can( 'edit_post', $post_id ) ) return $post_id;
+
+        error_log( print_r( $_POST['classly_schedule'], true ) );
 
         // Save.
         update_post_meta( $post_id, 'classly_schedule', $_POST['classly_schedule'] );
