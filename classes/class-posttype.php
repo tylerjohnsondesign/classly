@@ -279,7 +279,7 @@ class classlyPostType {
             <button class="classly_schedule_add_button">+ Add Schedule</button>
         </div>
         <form method="POST">
-            <input type="hidden" name="classly_schedule" id="classly_schedule" value='<?php echo $value; ?>'>
+            <input type="hidden" name="classly_schedule" id="classly_schedule" value='<?php echo get_post_meta( get_the_ID(), 'classly_schedule', true ); ?>'>
         </form><?php
 
     }
