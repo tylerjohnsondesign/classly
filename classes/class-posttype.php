@@ -239,9 +239,8 @@ class classlyPostType {
         // Get value.
         $value = json_decode( get_post_meta( get_the_ID(), 'classly_schedule', true ), true );
 
-        // TODO: Check if value is an array.
         // Encode value.
-        $encoded = trim( json_encode( $value ), '[]' );
+        $encoded = trim( json_encode( (array)$value ), '[]' );
 
         // IDs.
         $ids = ( ! empty( $value ) ) ? count( (array)$value ) : 1; ?>

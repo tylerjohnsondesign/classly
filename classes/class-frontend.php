@@ -28,14 +28,30 @@ class classlyFrontend {
      */
     public function template( $template ) {
 
-        // Check post type.
-        if( ! is_singular( 'class' ) ) return $template;
+        // Get global.
+        global $wp;
 
-        // Check if template exists within theme.
-        if( file_exists( get_stylesheet_directory() . '/classly/single-class.php' ) ) return get_stylesheet_directory() . '/classly/single-class.php';
+        // Check.
+        if( $wp->query_vars['post_type'] == 'class' ) {
 
-        // Check if template exists.
-        if( file_exists( CLASSLY_PATH . 'views/single-class.php' ) ) return CLASSLY_PATH . 'views/single-class.php';
+            // Check if template exists within theme.
+            if( file_exists( get_stylesheet_directory() . '/classly/single-class.php' ) ) return get_stylesheet_directory() . '/classly/single-class.php';
+
+            // Check if template exists.
+            if( file_exists( CLASSLY_PATH . 'views/single-class.php' ) ) return CLASSLY_PATH . 'views/single-class.php';
+
+        } elseif( isset( $wp->query_vars['instructor'] ) ) {
+
+            // Check if template exists within theme.
+            if( file_exists( get_stylesheet_directory() . '/classly/single-instructor.php' ) ) return get_stylesheet_directory() . '/classly/single-instructor.php';
+
+            // Check if template exists.
+            if( file_exists( CLASSLY_PATH . 'views/single-instructor.php' ) ) return CLASSLY_PATH . 'views/single-instructor.php';
+
+        }
+
+        // Check default template.
+        return $template;
 
     }
 
