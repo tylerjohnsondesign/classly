@@ -164,6 +164,27 @@ button.classly-filter-active {
     color: #fff;
 }
 
+.classly-instructor-social {
+    display: flex;
+    grid-gap: 5px;
+}
+
+.classly-instructor-social a svg {
+    width: 30px;
+    height: 30px;
+}
+
+.classly-instructor-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.classly-single-instructors ul li a {
+    color: #000;
+    text-decoration: none;
+}
+
 @media screen and (max-width:991px) {
 
     .classly-times {

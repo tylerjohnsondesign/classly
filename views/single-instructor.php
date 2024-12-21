@@ -16,10 +16,6 @@ get_header(); ?>
         // Get term meta.
         $meta = get_term_meta( $term->term_id );
 
-        echo '<pre>';
-        print_r( $meta );
-        echo '</pre>';
-
         // Term title. ?>
         <h1><?php echo $term->name; ?></h1><?php
 
@@ -34,7 +30,7 @@ get_header(); ?>
             <div class="classly-instructor-main"><?php
 
                 // Content.
-                the_content( $term->description ); ?>
+                echo  wpautop( $term->description ); ?>
 
             </div>
             <div class="classly-instructor-side"><?php
@@ -53,8 +49,7 @@ get_header(); ?>
                 if( ! empty( get_term_meta( $term->term_id, 'email', true ) ) || ! empty( get_term_meta( $term->term_id, 'facebook', true ) ) || ! empty( get_term_meta( $term->term_id, 'instagram', true ) ) ) {
                     
                     // Social. ?>
-                    <div class="classly-instructor-social">
-                        <h5>Connect</h5><?php
+                    <div class="classly-instructor-social"><?php
 
                         // Set networks.
                         $networks = [ 'facebook', 'instagram', 'email' ];
