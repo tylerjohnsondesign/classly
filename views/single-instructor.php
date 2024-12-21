@@ -58,9 +58,12 @@ get_header(); ?>
                         foreach( $networks as $network ) {
 
                             // Check for network.
-                            if( ! empty( get_term_meta( $term->term_id, $network, true ) ) ) { ?>
+                            if( ! empty( get_term_meta( $term->term_id, $network, true ) ) ) {
+                                
+                                // Set link.
+                                $link = ( $network !== 'email' ) ? get_term_meta( $term->term_id, $network, true ) : 'mailto:' . get_term_meta( $term->term_id, $network, true ); ?>
 
-                                <a href="<?php echo get_term_meta( $term->term_id, $network, true ); ?>" class="classly-instructor-network class-instructor-<?php echo $network; ?>" target="_blank"><?php include CLASSLY_PATH . 'assets/images/' . $network . '.svg'; ?></a><?php
+                                <a href="<?php echo  $link; ?>" class="classly-instructor-network class-instructor-<?php echo $network; ?>" target="_blank"><?php include CLASSLY_PATH . 'assets/images/' . $network . '.svg'; ?></a><?php
 
                             }
 
